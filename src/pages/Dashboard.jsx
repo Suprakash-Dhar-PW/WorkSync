@@ -78,7 +78,7 @@ export default function Dashboard() {
             )}
 
             {activeTab === "employees" && isManager && (
-              <div className="grid gap-8 lg:grid-cols-[380px_1fr]">
+              <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
                 <div className="lg:order-2 space-y-6">
                   <div className="sticky top-8 glass-panel p-6 rounded-2xl border-l-4 border-purple-500/50">
                     <h3 className="text-lg font-semibold mb-4">

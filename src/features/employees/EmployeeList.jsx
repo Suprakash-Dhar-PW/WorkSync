@@ -39,7 +39,7 @@ export default function EmployeeList() {
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid gap-4 md:grid-cols-2">
       {employees.map((emp) => (
         <div
           key={emp.id}
@@ -69,8 +69,8 @@ export default function EmployeeList() {
 
           <div className="space-y-2 mb-4 bg-white/5 rounded-lg p-3">
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Mail className="h-3.5 w-3.5 text-primary/70" />
-              <span className="truncate flex-1" title={emp.email}>
+              <Mail className="h-3.5 w-3.5 text-primary/70 shrink-0" />
+              <span className="break-all flex-1" title={emp.email}>
                 {emp.email}
               </span>
             </div>

@@ -38,20 +38,38 @@ Deno.serve(async (req) => {
     }
 
     // Parse request body
-    const { email, name } = await req.json()
+    const { email, name, password } = await req.json()
     if (!email) {
       throw new Error('Email is required')
     }
 
     console.log(`Manager ${manager.email} inviting ${email}`)
+    
+    let invitedUser;
+    let inviteError;
 
-    // Invite user via Admin API
-    const { data: invitedUser, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
-      data: { name, role: 'employee' }
-    })
+    if (password) {
+       // Create user directly with password (useful for testing/demo)
+       const result = await supabaseAdmin.auth.admin.createUser({
+          email,
+          password,
+          email_confirm: true,
+          user_metadata: { name, role: 'employee' }
+       })
+       invitedUser = result.data;
+       inviteError = result.error;
+    } else {
+       // Invite user via email
+       const result = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+          data: { name, role: 'employee' }
+       })
+       invitedUser = result; // inviteUserByEmail returns { data: { user: User, ... }, error }
+       if (result.data) invitedUser = result.data; // normalize structure
+       inviteError = result.error;
+    }
 
     if (inviteError) throw inviteError
-    if (!invitedUser.user) throw new Error('Failed to generate invite')
+    if (!invitedUser || !invitedUser.user) throw new Error('Failed to create/invite user')
 
     const employeeId = invitedUser.user.id
 

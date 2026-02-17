@@ -7,6 +7,7 @@ export default function CreateEmployee() {
   const { fetchEmployees } = useEmployees();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
@@ -20,7 +21,7 @@ export default function CreateEmployee() {
       const { data, error } = await supabase.functions.invoke(
         "create-employee",
         {
-          body: { email, name },
+          body: { email, name, password },
         },
       );
 
@@ -30,6 +31,7 @@ export default function CreateEmployee() {
       setMessage({ type: "success", text: "Invitation sent successfully!" });
       setEmail("");
       setName("");
+      setPassword("");
       fetchEmployees(); // Refresh list
     } catch (err) {
       console.error(err);
@@ -69,6 +71,17 @@ export default function CreateEmployee() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+          />
+        </div>
+
+        <div className="relative group">
+          <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
+          <input
+            type="password"
+            className="w-full pl-10 pr-4 py-3 glass-input rounded-xl focus:ring-primary/50 bg-black/20"
+            placeholder="Password (Optional - for testing)"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
       </div>
